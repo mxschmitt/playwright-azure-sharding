@@ -3,8 +3,45 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-container: mcr.microsoft.com/playwright:v1.34.3-jammy
 
+strategy:
+  matrix:
+    chromium-1:
+      project: chromium
+      shardIndex: 1
+      shardTotal: 3
+    chromium-2:
+      project: chromium
+      shardIndex: 2
+      shardTotal: 3
+    chromium-3:
+      project: chromium
+      shardIndex: 3
+      shardTotal: 3
+    firefox-1:
+      project: firefox
+      shardIndex: 1
+      shardTotal: 3
+    firefox-2:
+      project: firefox
+      shardIndex: 2
+      shardTotal: 3
+    firefox-3:
+      project: firefox
+      shardIndex: 3
+      shardTotal: 3
+    webkit-1:
+      project: webkit
+      shardIndex: 1
+      shardTotal: 3
+    webkit-2:
+      project: webkit
+      shardIndex: 2
+      shardTotal: 3
+    webkit-3:
+      project: webkit
+      shardIndex: 3
+      shardTotal: 3
 steps:
 - task: NodeTool@0
   inputs:
@@ -13,13 +50,7 @@ steps:
 
 - script: npm ci
   displayName: 'npm ci'
-- script: npx playwright test
+- script: npx playwright install --with-deps
+  displayName: 'Install Playwright browsers'
+- script: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
   displayName: 'Run Playwright tests'
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/test-results.xml'
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    mergeTestResults: true
-    failTaskOnFailedTests: true
-    testRunTitle: 'Playwright tests'
