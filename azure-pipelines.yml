@@ -52,5 +52,5 @@ steps:
   displayName: 'npm ci'
 - script: npx playwright install --with-deps
   displayName: 'Install Playwright browsers'
-- script: npx playwright test --project=${{ matrix.project }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+- script: npx playwright test --project=$(project) --shard=$(shardIndex)/$(shardTotal)
   displayName: 'Run Playwright tests'
