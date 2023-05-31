@@ -10,38 +10,6 @@ strategy:
       project: chromium
       shardIndex: 1
       shardTotal: 3
-    chromium-2:
-      project: chromium
-      shardIndex: 2
-      shardTotal: 3
-    chromium-3:
-      project: chromium
-      shardIndex: 3
-      shardTotal: 3
-    firefox-1:
-      project: firefox
-      shardIndex: 1
-      shardTotal: 3
-    firefox-2:
-      project: firefox
-      shardIndex: 2
-      shardTotal: 3
-    firefox-3:
-      project: firefox
-      shardIndex: 3
-      shardTotal: 3
-    webkit-1:
-      project: webkit
-      shardIndex: 1
-      shardTotal: 3
-    webkit-2:
-      project: webkit
-      shardIndex: 2
-      shardTotal: 3
-    webkit-3:
-      project: webkit
-      shardIndex: 3
-      shardTotal: 3
 steps:
 - task: NodeTool@0
   inputs:
@@ -54,3 +22,8 @@ steps:
   displayName: 'Install Playwright browsers'
 - script: npx playwright test --project=$(project) --shard=$(shardIndex)/$(shardTotal)
   displayName: 'Run Playwright tests'
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: playwright-report
+    artifact: playwright-report
+    publishLocation: 'pipeline'
